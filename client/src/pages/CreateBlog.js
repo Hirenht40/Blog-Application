@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
+import { Select, MenuItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
 import toast from "react-hot-toast";
+
 const CreateBlog = () => {
   const id = localStorage.getItem("userId");
   const navigate = useNavigate();
@@ -10,22 +18,22 @@ const CreateBlog = () => {
     title: "",
     description: "",
     image: "",
+    category: "",
   });
-  // input change
+
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setInputs((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
-  //form
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post("/api/v1/blog/create-blog", {
-        title: inputs.title,
-        description: inputs.description,
-        image: inputs.image,
+        ...inputs,
         user: id,
       });
       if (data?.success) {
@@ -36,6 +44,7 @@ const CreateBlog = () => {
       console.log(error);
     }
   };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -57,7 +66,7 @@ const CreateBlog = () => {
             padding={3}
             color="gray"
           >
-            Create A Pots
+            Create A Post
           </Typography>
           <InputLabel
             sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
@@ -98,12 +107,32 @@ const CreateBlog = () => {
             variant="outlined"
             required
           />
+          <InputLabel
+            sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
+          >
+            Category
+          </InputLabel>
+          <Select
+            name="category"
+            value={inputs.category}
+            onChange={handleChange}
+            margin="normal"
+            variant="outlined"
+            required
+          >
+            <MenuItem value="Food">Food</MenuItem>
+            <MenuItem value="Education">Education</MenuItem>
+            <MenuItem value="Business">Business</MenuItem>
+            <MenuItem value="Personal">Personal</MenuItem>
+          </Select>
           <Button type="submit" color="primary" variant="contained">
             SUBMIT
           </Button>
         </Box>
       </form>
     </>
+ 
+
   );
 };
 

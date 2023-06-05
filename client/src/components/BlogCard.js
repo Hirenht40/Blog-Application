@@ -17,6 +17,7 @@ export default function BlogCard({
   title,
   description,
   image,
+  category,
   username,
   time,
   id,
@@ -77,6 +78,9 @@ export default function BlogCard({
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Description : {description}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Category : {category}
         </Typography>
       </CardContent>
     </Card>
